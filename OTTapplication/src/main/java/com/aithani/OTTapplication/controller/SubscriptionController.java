@@ -1,38 +1,35 @@
 package com.aithani.OTTapplication.controller;
 
-import com.aithani.OTTapplication.entity.Subscription;
-import com.aithani.OTTapplication.SubscriptionService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.aithani.OTTapplication.entity.SubscriptionMaster;
+import com.aithani.OTTapplication.service.SubscriptionService;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/subscriptions")
-@Slf4j
+@RequiredArgsConstructor
 public class SubscriptionController {
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
-    @Autowired
-    private SubscriptionService subscriptionService;
+    private final SubscriptionService subscriptionService;
 
-    // 1st API: Fetch all subscriptions
-    @GetMapping("/all")
-    public ResponseEntity<List<Subscription>> getAllSubscriptions() {
-        List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
-        return new ResponseEntity<>(subscriptions, HttpStatus.OK);
+    // API 1: Get all subscriptions
+    @GetMapping
+    public ResponseEntity<List<SubscriptionMaster>> getAllSubscriptions() {
+        logger.info("API Call: Get all subscriptions");
+        return ResponseEntity.ok(subscriptionService.getAllSubscriptions());
     }
 
-    // 2nd API: Validate subscription by user ID
-    @GetMapping("/validate/{userId}")
-    public ResponseEntity<String> validateSubscription(@PathVariable("userId") int userId) {
-        String result = subscriptionService.validateSubscription(userId);
-        HttpStatus status = result.contains("does not exist") ? HttpStatus.NOT_FOUND : HttpStatus.OK;
-        return new ResponseEntity<>(result, status);
+    // API 2: Check subscription status
+    @GetMapping("/check/{userId}")
+    public ResponseEntity<String> checkSubscription(@PathVariable Long userId) {
+        logger.info("API Call: Check subscription for userId: {}", userId);
+        String status = subscriptionService.checkUserSubscription(userId);
+        return ResponseEntity.ok(status);
     }
 }

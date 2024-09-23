@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/OTTapplication.iml" filepath="$PROJECT_DIR$/.idea/OTTapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OTTapplication/OTTapplication.iml" filepath="$PROJECT_DIR$/OTTapplication/OTTapplication.iml" />
     </modules>
   </component>
 </project>
